@@ -23,16 +23,14 @@ const transporter = nodemailer.createTransport({
 
 app.post("/send", (req,res) => {
 
-    const {name, title, message} = req.body
+    const {name, title, message, email} = req.body
     
     transporter.sendMail({
         from: `${name} <amorimdev.portfolio@gmail.com>`,
         to: "pedrobatutu@gmail.com",
         subject: title,
-        text: message
+        text: `Email enviado por: ${email} || ${message}`
     })
-
-    console.log(nome, titulo, mensagem)
 
     res.end()
     
