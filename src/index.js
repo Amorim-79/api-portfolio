@@ -2,6 +2,7 @@ const express = require('express')
 const nodemailer = require('nodemailer')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const { celebrate, Segments, Joi, errors } = require('celebrate')
 
 const app = express()
 
@@ -10,6 +11,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
     extended: false
 }))
+app.use(errors())
 
 const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -21,7 +23,14 @@ const transporter = nodemailer.createTransport({
     }
 })
 
-app.post("/send", (req,res) => {
+app.post("/send", celebrate({
+    [Segments.BODY]: Joi.object().keys({
+        name: Joi.string().required(),
+        title: Joi.string().required(),
+        message: Joi.string().required(),
+        email: Joi.string().required().email()
+    })
+}), (req,res) => {
 
     const {name, title, message, email} = req.body
     
