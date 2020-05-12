@@ -1,10 +1,17 @@
 const express = require('express')
-const nodemailer = require('nodemailer')
 const bodyParser = require('body-parser')
 const cors = require('cors')
-const { celebrate, Segments, Joi, errors } = require('celebrate')
+const { errors } = require('celebrate')
+const mongoose = require('mongoose')
+
+const routes = require('./routes')
 
 const app = express()
+
+mongoose.connect('mongodb+srv://amorim:amorim0311@cluster0-ktiqx.mongodb.net/portfolio?retryWrites=true&w=majority', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
 
 app.use(cors())
 app.use(bodyParser.json())
@@ -12,37 +19,8 @@ app.use(bodyParser.urlencoded({
     extended: false
 }))
 app.use(errors())
+app.use(routes)
 
-const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-        user: "amorimdev.portfolio@gmail.com",
-        pass: "pedro147258369"
-    }
-})
 
-app.post("/send", celebrate({
-    [Segments.BODY]: Joi.object().keys({
-        name: Joi.string().required(),
-        title: Joi.string().required(),
-        message: Joi.string().required(),
-        email: Joi.string().required().email()
-    })
-}), (req,res) => {
-
-    const {name, title, message, email} = req.body
-    
-    transporter.sendMail({
-        from: `${name} <amorimdev.portfolio@gmail.com>`,
-        to: "pedrobatutu@gmail.com",
-        subject: title,
-        text: `Email enviado por: ${email} || ${message}`
-    })
-
-    res.end()
-    
-})
 
 app.listen(process.env.PORT || 3333)
