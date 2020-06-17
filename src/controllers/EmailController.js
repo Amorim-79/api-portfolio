@@ -1,13 +1,14 @@
 const nodemailer = require('nodemailer')
 
+require('dotenv/config')
 
 const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
     secure: true,
     auth: {
-        user: "amorimdev.portfolio@gmail.com",
-        pass: "pedro147258369"
+        user: process.env.EMAIL_REMETENTE,
+        pass: process.env.EMAIL_REMETENTE_PASS
     }
 })
 
@@ -17,8 +18,8 @@ module.exports = {
         const { name, title, message, email } = req.body
 
         transporter.sendMail({
-            from: `${name} <amorimdev.portfolio@gmail.com>`,
-            to: "pedrobatutu@gmail.com",
+            from: `${name} <${process.env.EMAIL_REMETENTE}>`,
+            to: process.env.EMAIL_DESTINO,
             subject: title,
             text: `Email enviado por: ${email} || ${message}`
         })
