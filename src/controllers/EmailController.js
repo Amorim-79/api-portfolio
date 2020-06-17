@@ -19,7 +19,7 @@ module.exports = {
 
         transporter.sendMail({
             from: `${name} <${process.env.EMAIL_REMETENTE}>`,
-            to: `${process.env.EMAIL_DESTINO}`,
+            to: process.env.EMAIL_DESTINO,
             subject: title,
             text: `Email enviado por: ${email} || ${message}`
         })
