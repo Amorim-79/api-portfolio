@@ -18,10 +18,10 @@ module.exports = {
         const { name, title, message, email } = req.body
 
         transporter.sendMail({
-            from: `${name} <${process.env.EMAIL_REMETENTE}>`,
+            from: process.env.EMAIL_REMETENTE,
             to: process.env.EMAIL_DESTINO,
             subject: title,
-            text: `Email enviado por: ${email} || ${message}`
+            text: `Email enviado por: ${name} / ${email} || ${message}`
         })
 
         res.end()
